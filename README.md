@@ -5,3 +5,5 @@ retrun statemnt redirect port
 
 and .env
 KINDE_POST_LOGIN_REDIRECT_URL=http://localhost:3005/api/auth/creation
+
+npx prisma db push
