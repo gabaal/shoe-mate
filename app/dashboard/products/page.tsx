@@ -1,3 +1,4 @@
+import prisma from "@/app/lib/db";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,16 +23,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontalIcon, PlusCircle, UserIcon } from "lucide-react";
+import { MoreHorizontal, PlusCircle, UserIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { unstable_noStore as noStore } from "next/cache";
 
-export default function ProductsPage() {
+async function getData() {
+  const data = await prisma.product.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return data;
+}
+
+export default async function ProductsRoute() {
+  noStore();
+  const data = await getData();
   return (
     <>
       <div className="flex items-center justify-end">
         <Button asChild className="flex items-center gap-x-2">
           <Link href="/dashboard/products/create">
-            <PlusCircle className="w-5 h-5" />
+            <PlusCircle className="w-3.5 h-3.5" />
             <span>Add Product</span>
           </Link>
         </Button>
@@ -40,7 +55,7 @@ export default function ProductsPage() {
         <CardHeader>
           <CardTitle>Products</CardTitle>
           <CardDescription>
-            Manage product and view thier performance
+            Manage your products and view their sales performance
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -56,30 +71,48 @@ export default function ProductsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell>
-                  <UserIcon className="h-14 w-14" />
-                </TableCell>
-                <TableCell>Nike Air</TableCell>
-                <TableHead>Active</TableHead>
-                <TableCell>£89.99</TableCell>
-                <TableCell>26/07/2024</TableCell>
-                <TableCell className="text-end">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button size="icon" variant="ghost">
-                        <MoreHorizontalIcon className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem>Delete</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
+              {data.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <Image
+                      alt="Product Image"
+                      src={item.images[0]}
+                      height={64}
+                      width={64}
+                      className="rounded-md object-cover h-16 w-16"
+                    />
+                  </TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.status}</TableCell>
+                  <TableCell>£{item.price}</TableCell>
+                  <TableCell>
+                    {new Intl.DateTimeFormat("en-UK").format(item.createdAt)}
+                  </TableCell>
+                  <TableCell className="text-end">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button size="icon" variant="ghost">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/products/${item.id}`}>
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/products/${item.id}/delete`}>
+                            Delete
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </CardContent>
