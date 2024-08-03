@@ -28,7 +28,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { unstable_noStore as noStore } from "next/cache";
 
-export default function BannerRoute() {
+async function getData() {
+  const data = await prisma.banner.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return data;
+}
+
+export default async function BannerRoute() {
+  const data = await getData();
   return (
     <>
       <div className="flex items-center justify-end">
@@ -56,29 +67,39 @@ export default function BannerRoute() {
             </TableHeader>
 
             <TableBody>
-              <TableRow>
-                <TableCell>
-                  <User2 className="h-16 w-16"></User2>
-                </TableCell>
-                <TableCell className="font-medium">Great Products</TableCell>
-                <TableCell className="text-end">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button size="icon" variant="ghost">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
+              {data.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <Image
+                      alt="Product Image"
+                      src={item.imageString}
+                      width={64}
+                      height={64}
+                      className="rounded-lg object-cover h-16 w-16"
+                    />
+                  </TableCell>
+                  <TableCell className="font-medium">{item.title}</TableCell>
+                  <TableCell className="text-end">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button size="icon" variant="ghost">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
 
-                      <DropdownMenuItem asChild>
-                        <Link href={``}>Delete</Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/banner/${item.id}/delete`}>
+                            Delete
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </CardContent>
