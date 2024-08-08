@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontal, PlusCircle, User2, User2Icon } from "lucide-react";
+import { MoreHorizontal, PlusCircle, User2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { unstable_noStore as noStore } from "next/cache";
@@ -39,6 +39,7 @@ async function getData() {
 }
 
 export default async function BannerRoute() {
+  noStore();
   const data = await getData();
   return (
     <>

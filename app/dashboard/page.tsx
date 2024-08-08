@@ -33,7 +33,7 @@ async function getData() {
   });
 
   const result = data.map((item) => ({
-    date: new Intl.DateTimeFormat("en-GB").format(item.createdAt),
+    date: new Intl.DateTimeFormat("en-US").format(item.createdAt),
     revenue: item.amount / 100,
   }));
 
@@ -51,7 +51,9 @@ export default async function Dashboard() {
         <Card className="xl:col-span-2">
           <CardHeader>
             <CardTitle>Transactions</CardTitle>
-            <CardDescription>Transactions from the last 7 days</CardDescription>
+            <CardDescription>
+              Recent transactions from the last 7 days
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Chart data={data} />

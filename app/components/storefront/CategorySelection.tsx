@@ -28,7 +28,7 @@ export function CategoriesSelection() {
             className="object-cover object-center "
           />
           <div className="bg-gradient-to-b from-transparent to-black opacity-55" />
-          <div className="p-6 flex items-end absolute inset-0 ">
+          <div className="p-6 flex items-end">
             <Link href="/products/all">
               <h3 className="text-white font-semibold">All Products</h3>
               <p className="mt-1 text-sm text-white">Shop Now</p>

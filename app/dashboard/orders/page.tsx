@@ -71,10 +71,10 @@ export default async function OrdersPage() {
                 <TableCell>Order</TableCell>
                 <TableCell>{item.status}</TableCell>
                 <TableCell>
-                  {new Intl.DateTimeFormat("en-GB").format(item.createdAt)}
+                  {new Intl.DateTimeFormat("en-US").format(item.createdAt)}
                 </TableCell>
                 <TableCell className="text-right">
-                  £{new Intl.NumberFormat("en-GB").format(item.amount / 100)}
+                  ${new Intl.NumberFormat("en-US").format(item.amount / 100)}
                 </TableCell>
               </TableRow>
             ))}

@@ -24,7 +24,7 @@ import Link from "next/link";
 import { SubmitButton } from "../SubmitButtons";
 import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
-import { UploadDropzone } from "@/app/lib/uploadthing";
+import { UploadDropzone } from "@/app/lib/uplaodthing";
 import { categories } from "@/app/lib/categories";
 import { useState } from "react";
 import { useFormState } from "react-dom";
@@ -79,7 +79,9 @@ export function EditForm({ data }: iAppProps) {
       <Card className="mt-5">
         <CardHeader>
           <CardTitle>Product Details</CardTitle>
-          <CardDescription>Update product details</CardDescription>
+          <CardDescription>
+            In this form you can update your product
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-6">

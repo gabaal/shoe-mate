@@ -1,5 +1,5 @@
 import { checkOut, delItem } from "@/app/actions";
-import { CheckoutButton, DeleteItem } from "@/app/components/SubmitButtons";
+import { ChceckoutButton, DeleteItem } from "@/app/components/SubmitButtons";
 import { Cart } from "@/app/lib/interfaces";
 import { redis } from "@/app/lib/redis";
 import { Button } from "@/components/ui/button";
@@ -65,7 +65,7 @@ export default async function BagRoute() {
                 <div className="flex flex-col h-full justify-between">
                   <div className="flex items-center gap-x-2">
                     <p>{item.quantity} x</p>
-                    <p>£{item.price}</p>
+                    <p>${item.price}</p>
                   </div>
 
                   <form action={delItem} className="text-end">
@@ -79,11 +79,11 @@ export default async function BagRoute() {
           <div className="mt-10">
             <div className="flex items-center justify-between font-medium">
               <p>Subtotal:</p>
-              <p>£{new Intl.NumberFormat("en-GB").format(totalPrice)}</p>
+              <p>${new Intl.NumberFormat("en-US").format(totalPrice)}</p>
             </div>
 
             <form action={checkOut}>
-              <CheckoutButton />
+              <ChceckoutButton />
             </form>
           </div>
         </div>

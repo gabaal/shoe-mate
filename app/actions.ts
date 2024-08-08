@@ -15,7 +15,7 @@ export async function createProduct(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) {
+  if (!user || user.email !== "jan@alenix.de") {
     return redirect("/");
   }
 
@@ -50,7 +50,7 @@ export async function editProduct(prevState: any, formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) {
+  if (!user || user.email !== "jan@alenix.de") {
     return redirect("/");
   }
 
@@ -89,7 +89,7 @@ export async function deleteProduct(formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) {
+  if (!user || user.email !== "jan@alenix.de") {
     return redirect("/");
   }
 
@@ -106,13 +106,14 @@ export async function createBanner(prevState: any, formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) {
+  if (!user || user.email !== "jan@alenix.de") {
     return redirect("/");
   }
 
   const submission = parseWithZod(formData, {
     schema: bannerSchema,
   });
+
   if (submission.status !== "success") {
     return submission.reply();
   }
@@ -131,7 +132,7 @@ export async function deleteBanner(formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) {
+  if (!user || user.email !== "jan@alenix.de") {
     return redirect("/");
   }
 
@@ -250,7 +251,7 @@ export async function checkOut() {
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
       cart.items.map((item) => ({
         price_data: {
-          currency: "gbp",
+          currency: "usd",
           unit_amount: item.price * 100,
           product_data: {
             name: item.name,
@@ -263,9 +264,14 @@ export async function checkOut() {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
-      success_url: "http://localhost:3000/payment/success",
-      cancel_url: "http://localhost:3000/payment/cancel",
-
+      success_url:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/payment/success"
+          : "https://shoe-marshal.vercel.app/payment/success",
+      cancel_url:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/payment/cancel"
+          : "https://shoe-marshal.vercel.app/payment/cancel",
       metadata: {
         userId: user.id,
       },

@@ -15,10 +15,10 @@ export default function DeleteRoute({ params }: { params: { id: string } }) {
     <div className="h-[80vh] w-full flex items-center justify-center">
       <Card className="max-w-xl">
         <CardHeader>
-          <CardTitle>Are you sure?</CardTitle>
+          <CardTitle>Are you absolutely sure?</CardTitle>
           <CardDescription>
             This action cannot be undone. This will permanently delete this
-            product and remove all data relating to it from our servers.
+            product and remove all data from our servers.
           </CardDescription>
         </CardHeader>
         <CardFooter className="w-full flex justify-between">

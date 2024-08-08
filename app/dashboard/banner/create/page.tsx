@@ -1,8 +1,8 @@
 "use client";
 
-import { createBanner, createProduct } from "@/app/actions";
+import { createBanner } from "@/app/actions";
 import { SubmitButton } from "@/app/components/SubmitButtons";
-import { UploadDropzone } from "@/app/lib/uploadthing";
+import { UploadDropzone } from "@/app/lib/uplaodthing";
 import { bannerSchema } from "@/app/lib/zodSchemas";
 import { Button } from "@/components/ui/button";
 import {
@@ -96,6 +96,7 @@ export default function BannerRoute() {
                   endpoint="bannerImageRoute"
                 />
               )}
+
               <p className="text-red-500">{fields.imageString.errors}</p>
             </div>
           </div>
